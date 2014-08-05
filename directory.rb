@@ -25,3 +25,7 @@ puts "Ruth Earle"
 puts "Javier Silverio"	
 puts "Stephen Lloyd"
 puts "Leopold Kwok"
+
+print "Overall, we have "
+print 25
+puts " great students"
