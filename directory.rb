@@ -34,8 +34,9 @@ def input_students
 		puts "How tall is #{name} (in cm)?"
 		height = gets.chomp.to_i
 
+		# prevents the user from entering a string as height (if a string is entered, it is converted to 0)
 		while height == 0
-			puts "Please enter a number."
+			puts "Please enter a valid number."
 			height = gets.chomp.to_i
 		end
 
@@ -61,13 +62,16 @@ def input_students
 end
 
 def print_header
-	puts "The students of my cohort at Makers Academy".center(70)
+	puts "Students at Makers Academy by cohort".center(70)
 	70.times { print "=" }
 	puts
 	puts "Name | Cohort | Hobby | Country | Height\n".center(70)
 end
 
-def display(students)
+def display_by_cohort(students)
+	# EXERCISE 9: sorts the students array by an element in the hashes
+	students.sort_by! { |s| s[:cohort] }
+
 	if students.length >= 1 # EXERCISE 13: only prints the list if there is at least 1 student
 		students.each_with_index do |student, index| # EXERCISE 2: adds an index number before each student
 			# EXERCISE 6: adds student country | EXERCISE 7: centers the output using the length of the header
@@ -137,5 +141,5 @@ end
 
 students = input_students
 print_header
-display(students)
+display_by_cohort(students)
 print_footer(students)
