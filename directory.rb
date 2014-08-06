@@ -1,10 +1,33 @@
+# def interactive_menu
+# 	students = []
+# 	loop do
+# 		puts "1. Input the students"
+# 		puts "2. Show the students"
+# 		puts "9. Exit"
+# 		selection = gets.chomp
+# 		case selection
+# 			when "1"
+# 				students = input_students
+# 			when "2"
+# 				print_header
+# 				display_by_cohort(students)
+# 				print_footer(students)
+# 			when "9"
+# 				exit
+# 			else
+# 				puts "Huh? Try again."
+# 		end
+# 	end
+# end
+
 def input_students
 	puts "Please enter the details of the students."
 	puts "To finish, just hit return twice."
 	# create an empty array
 	students = []
 	# get the first name
-	name = gets.chomp
+	# EXERCISE 11: uses chop in place of chomp
+	name = gets.chop
 	# while the name is not empty, repeat this code
 	while !name.empty? do
 		# EXERCISE 8: asks for cohort
@@ -65,7 +88,7 @@ def print_header
 	puts "Students at Makers Academy by cohort".center(70)
 	70.times { print "=" }
 	puts
-	puts "Name | Cohort | Hobby | Country | Height\n".center(70)
+	puts "Name | Cohort | Hobby | Country | Height (cm)\n".center(70)
 end
 
 def display_by_cohort(students)
@@ -83,12 +106,14 @@ def display_by_cohort(students)
 end
 
 def print_footer(students)
+	puts
 	# EXERCISE 10: uses singular and plural form as appropriate
 	if students.length  == 1
-		puts "Overall, we have #{students.length} great student."
+		puts "Overall, we have #{students.length} great student.".center(70)
 	else
-		puts "Overall, we have #{students.length} great students."
+		puts "Overall, we have #{students.length} great students.".center(70)
 	end
+	puts
 end
 
 # EXERCISE 1
