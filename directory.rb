@@ -10,23 +10,42 @@ def input_students
 		# EXERCISE 8: asks for cohort
 		puts "What cohort is #{name} in?"
 		# EXERCISE 8: converts to symbol
-		cohort = gets.chomp.to_sym
+		cohort = gets.chomp.downcase.to_sym
 		# EXERCISE 8: reprompts user for input
-		if cohort.empty?
-			puts "Please enter a cohort, or press return to fill in the default value of August."
-			cohort = gets.chomp.to_sym
+		calendar = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december]
+		
+		# EXERCISE 8: corrects for typos
+		while !calendar.include?(cohort) do
+			puts "Please enter a valid calendar month, or press return for a default value of August."
+			cohort = gets.chomp.downcase.to_sym
 			# EXERCISE 8: supplies a default value of August if the value is still empty
 			if cohort.empty?
 				cohort = :august
 			end
 		end
 
-		# EXERCISE 6: additional field of country
+		# EXERCISE 6: additional fields
+		puts "What is #{name}'s favourite thing to do?"
+		hobby = gets.chomp
+
 		puts "What is #{name}'s country of birth?"
 		country = gets.chomp
 
+		puts "How tall is #{name} (in cm)?"
+		height = gets.chomp.to_i
+
+		while height == 0
+			puts "Please enter a number."
+			height = gets.chomp.to_i
+		end
+
 		# add the student hash to the array
-		students << {:name => name, :cohort => cohort, :country => country}
+		students << {	:name => name,
+						:cohort => cohort,
+						:hobby => hobby,
+						:country => country,
+						:height => height
+					}
 
 		# EXERCISE 10: uses singular and plural form as appropriate
 		if students.length  == 1
@@ -42,15 +61,17 @@ def input_students
 end
 
 def print_header
-	puts "The students of my cohort at Makers Academy"
-	puts "==========================================="
+	puts "The students of my cohort at Makers Academy".center(70)
+	70.times { print "=" }
+	puts
+	puts "Name | Cohort | Hobby | Country | Height\n".center(70)
 end
 
-def print(students)
+def display(students)
 	if students.length >= 1 # EXERCISE 13: only prints the list if there is at least 1 student
 		students.each_with_index do |student, index| # EXERCISE 2: adds an index number before each student
 			# EXERCISE 6: adds student country | EXERCISE 7: centers the output using the length of the header
-			puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort) from #{student[:country]}".center(43)
+			puts "#{index+1}. #{student[:name].capitalize} | #{student[:cohort].capitalize} | #{student[:hobby].capitalize} | #{student[:country].capitalize} | #{student[:height]}".center(70)
 		end
 	else
 		puts "There are not enough students to make a list :("
@@ -71,7 +92,7 @@ end
 # Alternative 1: Using print
 # Use “print”, and add “\n” to the end of each line.
 # However, we have defined “print” as something else so this will produce an error.
-# We need to rename the “print(students)” function to something else, e.g. “show(students)”.
+# We need to rename the “print(students)” function to something else, e.g. “display(students)”.
 #
 # Alternative 2: Using p
 # p will print the quotes with the message.
@@ -98,7 +119,7 @@ end
 # end
 
 # EXERCISE 5
-# def show(students)
+# def display(students)
 #	m = 0
 #	while m < students.length
 #		puts "#{students[m][:name]} (#{students[m][:cohort]} cohort)".center(43)
@@ -106,7 +127,7 @@ end
 #	end
 # end
 #
-# def show(students)
+# def display(students)
 #	m = 0
 #	until m == students.length
 #		puts "#{students[m][:name]} (#{students[m][:cohort]} cohort)".center(43)
@@ -116,5 +137,5 @@ end
 
 students = input_students
 print_header
-print(students)
+display(students)
 print_footer(students)
