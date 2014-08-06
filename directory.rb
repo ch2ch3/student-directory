@@ -1,24 +1,24 @@
-# def interactive_menu
-# 	students = []
-# 	loop do
-# 		puts "1. Input the students"
-# 		puts "2. Show the students"
-# 		puts "9. Exit"
-# 		selection = gets.chomp
-# 		case selection
-# 			when "1"
-# 				students = input_students
-# 			when "2"
-# 				print_header
-# 				display_by_cohort(students)
-# 				print_footer(students)
-# 			when "9"
-# 				exit
-# 			else
-# 				puts "Huh? Try again."
-# 		end
-# 	end
-# end
+def interactive_menu
+	students = []
+	loop do
+		puts "1. Input the students"
+		puts "2. Show the students"
+		puts "9. Exit"
+		selection = gets.chomp
+		case selection
+			when "1"
+				students = input_students
+			when "2"
+				print_header
+				display_by_cohort(students)
+				print_footer(students)
+			when "9"
+				exit
+			else
+				puts "Huh? Try again."
+		end
+	end
+end
 
 def input_students
 	puts "Please enter the details of the students."
@@ -26,6 +26,7 @@ def input_students
 	# create an empty array
 	students = []
 	# get the first name
+	puts "What is this student's name?"
 	# EXERCISE 11: uses chop in place of chomp
 	name = gets.chop
 	# while the name is not empty, repeat this code
@@ -164,7 +165,9 @@ end
 #	end
 # end
 
-students = input_students
-print_header
-display_by_cohort(students)
-print_footer(students)
+# students = input_students
+# print_header
+# display_by_cohort(students)
+# print_footer(students)
+
+interactive_menu
