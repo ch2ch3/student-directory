@@ -3,7 +3,7 @@
 def interactive_menu
 	loop do
 		print_menu
-		process(gets.chomp)
+		process(STDIN.gets.chomp)
 	end
 end
 
@@ -39,20 +39,20 @@ def input_students
 	# get the first name
 	puts "What is this student's name?"
 	# EXERCISE 11: uses chop in place of chomp
-	name = gets.chop
+	name = STDIN.gets.chop
 	# while the name is not empty, repeat this code
 	while !name.empty? do
 		# EXERCISE 8: asks for cohort
 		puts "What cohort is #{name} in?"
 		# EXERCISE 8: converts to symbol
-		cohort = gets.chomp.downcase.to_sym
+		cohort = STDIN.gets.chomp.downcase.to_sym
 		# EXERCISE 8: reprompts user for input
 		calendar = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december]
 		
 		# EXERCISE 8: corrects for typos
 		while !calendar.include?(cohort) do
 			puts "Oops! Enter a valid calendar month, or press return for a default value of August."
-			cohort = gets.chomp.downcase.to_sym
+			cohort = STDIN.gets.chomp.downcase.to_sym
 			# EXERCISE 8: supplies a default value of August if the value is still empty
 			if cohort.empty?
 				cohort = :august
@@ -61,25 +61,25 @@ def input_students
 
 		# EXERCISE 6: additional fields
 		puts "How old is #{name}?"
-		age = gets.chomp
+		age = STDIN.gets.chomp
 		# prevents the user from entering a string as age (if a string is entered, it is converted to 0)
 		if age.empty?
 			age = "Sensitive"
 		else
 			while age.to_i < 18 || age.to_i > 100
 				puts "Oops! Please enter a valid number."
-				age = gets.chomp.to_i
+				age = STDIN.gets.chomp.to_i
 			end
 		end
 
 		puts "What is #{name}'s favourite thing to do?"
-		hobby = gets.chomp
+		hobby = STDIN.gets.chomp
 		if hobby.empty?
 			hobby = "Secret"
 		end
 
 		puts "What is #{name}'s country of birth?"
-		country = gets.chomp
+		country = STDIN.gets.chomp
 		if country.empty?
 			country = "Secret"
 		end
@@ -100,7 +100,7 @@ def input_students
 			puts "Now we have #{@students.length} students. Enter another name, or press return to exit."
 		end
 		#get another name from the user
-		name = gets.chomp
+		name = STDIN.gets.chomp
 	end
 	# return array of students
 	@students
@@ -160,8 +160,19 @@ def save_students
 	file.close
 end
 
-def load_students
-	file = File.open("students.csv", "r")
+def try_load_students
+	filename = ARGV.first # first argument from the command line
+	return if filename.nil? # get out of the method if filename not given
+	if File.exists?(filename) # if it exists
+		load_students(filename)
+	else
+		puts "Oops, #{filename} doesn't seem to exist."
+		exit
+	end
+end
+
+def load_students(filename = "students.csv")
+	file = File.open(filename, "r")
 	file.readlines.each do |line|
 		name, cohort, age, hobby, country = line.chomp.split(",")
 		@students << {
@@ -173,9 +184,10 @@ def load_students
 					}
 	end
 	file.close
-	puts "Loaded! You can now press 2 to show the list."
+	puts "Loaded #{@students.length} from #{filename}!"
 end
 
+try_load_students
 interactive_menu
 
 # EXERCISE 1
