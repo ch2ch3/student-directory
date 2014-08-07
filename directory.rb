@@ -39,59 +39,47 @@ def input_students
 	# get the first name
 	puts "What is this student's name?"
 	# EXERCISE 11: uses chop in place of chomp
-	name = STDIN.gets.chop
+	@name = STDIN.gets.chop
 	# while the name is not empty, repeat this code
-	while !name.empty? do
+	while !@name.empty? do
 		# EXERCISE 8: asks for cohort
-		puts "What cohort is #{name} in?"
+		puts "What cohort is #{@name} in?"
 		# EXERCISE 8: converts to symbol
-		cohort = STDIN.gets.chomp.downcase.to_sym
+		@cohort = STDIN.gets.chomp.downcase.to_sym
 		# EXERCISE 8: reprompts user for input
 		calendar = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october, :november, :december]
 		
 		# EXERCISE 8: corrects for typos
-		while !calendar.include?(cohort) do
+		while !calendar.include?(@cohort) do
 			puts "Oops! Enter a valid calendar month, or press return for a default value of August."
-			cohort = STDIN.gets.chomp.downcase.to_sym
+			@cohort = STDIN.gets.chomp.downcase.to_sym
 			# EXERCISE 8: supplies a default value of August if the value is still empty
-			if cohort.empty?
-				cohort = :august
-			end
+			@cohort = :august if @cohort.empty?
 		end
 
 		# EXERCISE 6: additional fields
-		puts "How old is #{name}?"
-		age = STDIN.gets.chomp
-		# prevents the user from entering a string as age (if a string is entered, it is converted to 0)
-		if age.empty?
-			age = "Sensitive"
+		puts "How old is #{@name}?"
+		@age = STDIN.gets.chomp
+		
+		if @age.empty?
+			@age = "Sensitive"
 		else
-			while age.to_i < 18 || age.to_i > 100
+			# also prevents the user from entering a string as age (if a string is entered, it is converted to 0)
+			while @age.to_i < 18 || @age.to_i > 100
 				puts "Oops! Please enter a valid number."
-				age = STDIN.gets.chomp.to_i
+				@age = STDIN.gets.chomp.to_i
 			end
 		end
 
-		puts "What is #{name}'s favourite thing to do?"
-		hobby = STDIN.gets.chomp
-		if hobby.empty?
-			hobby = "Secret"
-		end
+		puts "What is #{@name}'s favourite thing to do?"
+		@hobby = STDIN.gets.chomp
+		@hobby = "Secret" if @hobby.empty?
 
-		puts "What is #{name}'s country of birth?"
-		country = STDIN.gets.chomp
-		if country.empty?
-			country = "Secret"
-		end
+		puts "What is #{@name}'s country of birth?"
+		@country = STDIN.gets.chomp
+		@country = "Secret" if @country.empty?
 
-		# add the student hash to the array
-		@students << {
-						:name => name,
-						:cohort => cohort,
-						:age => age,
-						:hobby => hobby,
-						:country => country
-					}
+		add_student
 
 		# EXERCISE 10: uses singular and plural form as appropriate
 		if @students.length == 1
@@ -100,12 +88,17 @@ def input_students
 			puts "Now we have #{@students.length} students. Enter another name, or press return to exit."
 		end
 		#get another name from the user
-		name = STDIN.gets.chomp
+		@name = STDIN.gets.chomp
 	end
 	# return array of students
 	@students
 end
 
+# add the student hash to the array
+def add_student
+	@students << { :name => @name, :cohort => @cohort, :age => @age, :hobby => @hobby, :country => @country }
+	@students
+end
 
 def show_students
 	print_header
@@ -174,14 +167,9 @@ end
 def load_students(filename = "students.csv")
 	file = File.open(filename, "r")
 	file.readlines.each do |line|
-		name, cohort, age, hobby, country = line.chomp.split(",")
-		@students << {
-						:name => name,
-						:cohort => cohort.to_sym,
-						:age => age,
-						:hobby => hobby,
-						:country => country,
-					}
+		@name, @cohort, @age, @hobby, @country = line.chomp.split(",")
+		@cohort = @cohort.to_sym
+		add_student
 	end
 	file.close
 	puts "Loaded #{@students.length} from #{filename}!"
