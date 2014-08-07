@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = []
 
 def interactive_menu
@@ -165,12 +167,11 @@ def try_load_students
 end
 
 def load_students(filename = "students.csv")
-	File.open(filename, "r") do |file|
-		while line = file.gets
-			@name, @cohort, @age, @hobby, @country = line.chomp.split(",")
-			@cohort = @cohort.to_sym
-			add_student
-		end
+	CSV.foreach(filename) do |row|
+		# row is already an array
+		@name, @cohort, @age, @hobby, @country = row
+		@cohort = @cohort.to_sym
+		add_student
 	end
 	puts "Loaded #{@students.length} from #{filename}!"
 end
