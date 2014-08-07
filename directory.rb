@@ -87,14 +87,14 @@ def input_students
 		else
 			puts "Now we have #{@students.length} students. Enter another name, or press return to exit."
 		end
-		#get another name from the user
+		# get another name from the user
 		@name = STDIN.gets.chomp
 	end
 	# return array of students
 	@students
 end
 
-# add the student hash to the array
+# EXTRA EXERCISE 4: method to add the student hash to the array
 def add_student
 	@students << { :name => @name, :cohort => @cohort, :age => @age, :hobby => @hobby, :country => @country }
 	@students
@@ -140,17 +140,17 @@ end
 
 def save_students
 	# open the file for writing, w = permission to write
-	file = File.open("students.csv", "w")
-	# iterate over the array of students to get each hash
-	@students.each do |student|
-		# for each hash, use the keys to get all the values and put it into an array
-		student_data = [student[:name], student[:cohort], student[:age], student[:hobby], student[:country]]
-		# joins the individual student array into a single string separated with commas
-		csv_line = student_data.join(",")
-		# puts the string into the file
-		file.puts csv_line
+	File.open("students.csv", "w") do |file|
+		# iterate over the array of students to get each hash
+		@students.each do |student|
+			# for each hash, use the keys to get all the values and put it into an array
+			student_data = [student[:name], student[:cohort], student[:age], student[:hobby], student[:country]]
+			# joins the individual student array into a single string separated with commas
+			csv_line = student_data.join(",")
+			# puts the string into the file
+			file.puts csv_line
+		end
 	end
-	file.close
 end
 
 def try_load_students
@@ -165,13 +165,13 @@ def try_load_students
 end
 
 def load_students(filename = "students.csv")
-	file = File.open(filename, "r")
-	file.readlines.each do |line|
-		@name, @cohort, @age, @hobby, @country = line.chomp.split(",")
-		@cohort = @cohort.to_sym
-		add_student
+	File.open(filename, "r") do |file|
+		while line = file.gets
+			@name, @cohort, @age, @hobby, @country = line.chomp.split(",")
+			@cohort = @cohort.to_sym
+			add_student
+		end
 	end
-	file.close
 	puts "Loaded #{@students.length} from #{filename}!"
 end
 
