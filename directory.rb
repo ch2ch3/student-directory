@@ -60,28 +60,33 @@ def input_students
 		end
 
 		# EXERCISE 6: additional fields
+		puts "How old is #{name}?"
+		age = gets.chomp.to_i
+		# prevents the user from entering a string as age (if a string is entered, it is converted to 0)
+		while age < 18 || age > 100
+			puts "Oops! Please enter a valid number."
+			age = gets.chomp.to_i
+		end
+
 		puts "What is #{name}'s favourite thing to do?"
 		hobby = gets.chomp
+		if hobby.empty?
+			hobby = "Secret"
+		end
 
 		puts "What is #{name}'s country of birth?"
 		country = gets.chomp
-
-		puts "How tall is #{name} (in cm)?"
-		height = gets.chomp.to_i
-
-		# prevents the user from entering a string as height (if a string is entered, it is converted to 0)
-		while height < 120
-			puts "Oops! Please enter a valid number."
-			height = gets.chomp.to_i
+		if country.empty?
+			country = "Secret"
 		end
 
 		# add the student hash to the array
 		@students << {
 						:name => name,
 						:cohort => cohort,
+						:age => age,
 						:hobby => hobby,
-						:country => country,
-						:height => height
+						:country => country
 					}
 
 		# EXERCISE 10: uses singular and plural form as appropriate
@@ -108,7 +113,7 @@ def print_header
 	puts "Students at Makers Academy by cohort".center(70)
 	70.times { print "=" }
 	puts
-	puts "Name | Cohort | Hobby | Country | Height (cm)\n".center(70)
+	puts "Name | Cohort | Age | Hobby | Country\n".center(70)
 end
 
 def print_students_list
@@ -118,7 +123,7 @@ def print_students_list
 	if @students.length >= 1 # EXERCISE 13: only prints the list if there is at least 1 student
 		@students.each_with_index do |student, index| # EXERCISE 2: adds an index number before each student
 			# EXERCISE 6: adds student country | EXERCISE 7: centers the output using the length of the header
-			puts "#{index+1}. #{student[:name].capitalize} | #{student[:cohort].capitalize} | #{student[:hobby].capitalize} | #{student[:country].capitalize} | #{student[:height]}".center(70)
+			puts "#{index+1}. #{student[:name].capitalize} | #{student[:cohort].capitalize} | #{student[:age]} | #{student[:hobby].capitalize} | #{student[:country].capitalize}".center(70)
 		end
 	else
 		puts "Oops! You haven't entered any students yet.".center(70)
@@ -142,7 +147,7 @@ def save_students
 	# iterate over the array of students to get each hash
 	@students.each do |student|
 		# for each hash, use the keys to get all the values and put it into an array
-		student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:height]]
+		student_data = [student[:name], student[:cohort], student[:age], student[:hobby], student[:country]]
 		# joins the individual student array into a single string separated with commas
 		csv_line = student_data.join(",")
 		# puts the string into the file
@@ -154,16 +159,17 @@ end
 def load_students
 	file = File.open("students.csv", "r")
 	file.readlines.each do |line|
-		name, cohort, hobby, country, height = line.chomp.split(",")
+		name, cohort, age, hobby, country = line.chomp.split(",")
 		@students << {
 						:name => name,
 						:cohort => cohort.to_sym,
+						:age => age.to_i,
 						:hobby => hobby,
 						:country => country,
-						:height => height.to_i
 					}
 	end
 	file.close
+	puts "Loaded! You can now press 2 to show the list."
 end
 
 interactive_menu
