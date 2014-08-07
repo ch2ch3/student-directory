@@ -142,15 +142,12 @@ end
 
 def save_students
 	# open the file for writing, w = permission to write
-	File.open("students.csv", "w") do |file|
+	CSV.open("students.csv", "wb") do |csv|
 		# iterate over the array of students to get each hash
 		@students.each do |student|
 			# for each hash, use the keys to get all the values and put it into an array
 			student_data = [student[:name], student[:cohort], student[:age], student[:hobby], student[:country]]
-			# joins the individual student array into a single string separated with commas
-			csv_line = student_data.join(",")
-			# puts the string into the file
-			file.puts csv_line
+			csv << student_data
 		end
 	end
 end
