@@ -1,16 +1,18 @@
 @students = []
 
+def interactive_menu
+	loop do
+		print_menu
+		process(gets.chomp)
+	end
+end
+
 def print_menu
 	puts "Enter the menu number of the function you want to access."
 	puts "1. Input the students"
 	puts "2. Show the students"
+	puts "3. Save the list to a students.csv file"
 	puts "9. Exit"
-end
-
-def show_students
-	print_header
-	print_students_list
-	print_footer
 end
 
 def process(selection)		
@@ -19,17 +21,12 @@ def process(selection)
 			input_students
 		when "2"
 			show_students
+		when "3"
+			save_students
 		when "9"
 			exit
 		else
 			puts "Whaa? Try again."
-	end
-end
-
-def interactive_menu
-	loop do
-		print_menu
-		process(gets.chomp)
 	end
 end
 
@@ -70,13 +67,14 @@ def input_students
 		height = gets.chomp.to_i
 
 		# prevents the user from entering a string as height (if a string is entered, it is converted to 0)
-		while height == 0
+		while height < 120
 			puts "Oops! Please enter a valid number."
 			height = gets.chomp.to_i
 		end
 
 		# add the student hash to the array
-		@students << {	:name => name,
+		@students << {
+						:name => name,
 						:cohort => cohort,
 						:hobby => hobby,
 						:country => country,
@@ -84,7 +82,7 @@ def input_students
 					}
 
 		# EXERCISE 10: uses singular and plural form as appropriate
-		if @students.length  == 1
+		if @students.length == 1
 			puts "Now we have #{@students.length} student. Enter another name, or press return to exit."
 		else
 			puts "Now we have #{@students.length} students. Enter another name, or press return to exit."
@@ -94,6 +92,27 @@ def input_students
 	end
 	# return array of students
 	@students
+end
+
+def save_students
+	# open the file for writing, w = permission to write
+	file = File.open("students.csv", "w")
+	# iterate over the array of students to get each hash
+	@students.each do |student|
+		# for each hash, use the keys to get all the values and put it into an array
+		student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:height]]
+		# joins the individual student array into a single string separated with commas
+		csv_line = student_data.join(",")
+		# puts the string into the file
+		file.puts csv_line
+	end
+	file.close
+end
+
+def show_students
+	print_header
+	print_students_list
+	print_footer
 end
 
 def print_header
@@ -113,14 +132,14 @@ def print_students_list
 			puts "#{index+1}. #{student[:name].capitalize} | #{student[:cohort].capitalize} | #{student[:hobby].capitalize} | #{student[:country].capitalize} | #{student[:height]}".center(70)
 		end
 	else
-		puts "There are not enough students to make a list :("
+		puts "Oops! You haven't entered any students yet.".center(70)
 	end
 end
 
 def print_footer
 	puts
 	# EXERCISE 10: uses singular and plural form as appropriate
-	if @students.length  == 1
+	if @students.length == 1
 		puts "Overall, we have #{@students.length} great student.".center(70)
 	else
 		puts "Overall, we have #{@students.length} great students.".center(70)
