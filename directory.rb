@@ -13,8 +13,8 @@ def print_menu
 	puts "Enter the menu number of the function you want to access."
 	puts "1. Input the students"
 	puts "2. Show the students"
-	puts "3. Save the list to students.csv"
-	puts "4. Load an existing students.csv"
+	puts "3. Save the list"
+	puts "4. Load an existing list"
 	puts "9. Exit"
 end
 
@@ -141,8 +141,10 @@ def print_footer
 end
 
 def save_students
+	puts "What do you want to name your file?"
+	filename = gets.chomp
 	# open the file for writing, w = permission to write
-	CSV.open("students.csv", "wb") do |csv|
+	CSV.open("#{filename}.csv", "wb") do |csv|
 		# iterate over the array of students to get each hash
 		@students.each do |student|
 			# for each hash, use the keys to get all the values and put it into an array
@@ -163,7 +165,9 @@ def try_load_students
 	end
 end
 
-def load_students(filename = "students.csv")
+def load_students
+	puts "What's the name of your file?"
+	filename = gets.chomp
 	CSV.foreach(filename) do |row|
 		# row is already an array
 		@name, @cohort, @age, @hobby, @country = row
