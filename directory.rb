@@ -61,11 +61,15 @@ def input_students
 
 		# EXERCISE 6: additional fields
 		puts "How old is #{name}?"
-		age = gets.chomp.to_i
+		age = gets.chomp
 		# prevents the user from entering a string as age (if a string is entered, it is converted to 0)
-		while age < 18 || age > 100
-			puts "Oops! Please enter a valid number."
-			age = gets.chomp.to_i
+		if age.empty?
+			age = "Sensitive"
+		else
+			while age.to_i < 18 || age.to_i > 100
+				puts "Oops! Please enter a valid number."
+				age = gets.chomp.to_i
+			end
 		end
 
 		puts "What is #{name}'s favourite thing to do?"
@@ -163,7 +167,7 @@ def load_students
 		@students << {
 						:name => name,
 						:cohort => cohort.to_sym,
-						:age => age.to_i,
+						:age => age,
 						:hobby => hobby,
 						:country => country,
 					}
