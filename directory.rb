@@ -90,10 +90,18 @@ def input_age
 	if @age.empty?
 		@age = "Sensitive"
 	else
-		# also prevents the user from entering a string as age (if a string is entered, it is converted to 0)
 		while @age.to_i < 18 || @age.to_i > 100
-			puts "Oops! Please enter a valid number."
-			@age = STDIN.gets.chomp.to_i
+			# prevents the user from entering a string as age (if a string is entered, it is converted to 0)
+			if @age.to_i == 0
+				puts "Please enter a valid age."
+				@age = STDIN.gets.chomp.to_i
+			elsif @age.to_i < 18
+				puts "Is #{@name} really that young?"
+				@age = STDIN.gets.chomp.to_i
+			elsif @age.to_i > 100
+				puts "Is #{@name} really that old?"
+				@age = STDIN.gets.chomp.to_i
+			end
 		end
 	end
 end
