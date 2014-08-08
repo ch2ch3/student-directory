@@ -39,8 +39,8 @@ def input_students
 	puts "Please enter the details of the students.\nTo finish, just hit return twice."
 	# get the first name
 	puts "What is this student's name?"
-	# EXERCISE 11: uses chop in place of chomp
-	@name = STDIN.gets.chop
+	# EXERCISE 11: uses delete in place of chomp
+	@name = STDIN.gets.delete("\n")
 	# while the name is not empty, repeat this code
 	while !@name.empty? do
 		input_cohort
@@ -119,7 +119,7 @@ end
 
 def print_students_list
 	# EXERCISE 9: sorts the students array by an element in the hashes
-	@students.sort_by! { |s| s[:cohort] }
+	@students.sort_by! { |student| student[:cohort] }
 
 	if @students.length >= 1 # EXERCISE 13: only prints the list if there is at least 1 student
 		@students.each_with_index do |student, index| # EXERCISE 2: adds an index number before each student
@@ -146,8 +146,10 @@ def print_footer
 end
 
 def save_students
+	# EXTRA EXERCISE 7: prompts user for filename
 	puts "Your file will be saved as [name].csv. What do you want to name your file?"
 	filename = gets.chomp
+	# EXTRA EXERCISE 6: uses CSV library
 	# open the file for writing, w = permission to write
 	CSV.open("#{filename}.csv", "w") do |csv|
 		# iterate over the array of students to get each hash
@@ -171,6 +173,7 @@ def try_load_students
 end
 
 def load_students
+	# EXTRA EXERCISE 7: prompts user for filename
 	puts "What's the name of your file? (Leave out the file extension.)"
 	filename = gets.chomp
 	while !File.exists?("#{filename}.csv")
@@ -181,6 +184,7 @@ def load_students
 	end
 
 	if File.exists?("#{filename}.csv")
+		# EXTRA EXERCISE 6: uses CSV library
 		CSV.foreach("#{filename}.csv") do |row|
 			# row is already an array
 			@name, @cohort, @age, @hobby, @country = row
@@ -191,6 +195,8 @@ def load_students
 	end
 end
 
+# EXTRA EXERCISE 3: prints name of currently executed file
+puts "You are running #{File.basename($0)}."
 try_load_students
 interactive_menu
 
@@ -240,4 +246,24 @@ interactive_menu
 #		puts "#{students[m][:name]} (#{students[m][:cohort]} cohort)".center(43)
 #		m += 1
 #	end
+# end
+
+# EXTRA EXERCISE 5
+# 
+# def load_students(filename = "students2.csv")
+# 	File.open(filename, "r") do |f1|
+# 		while line = f1.gets
+# 			name, cohort, age, hobby, country = line.chomp.split(",")
+# 			@students << { :name => name, :cohort => cohort, :age => age, :hobby => hobby, :country => country }
+# 		end
+# 	end
+# end
+# 
+# def save_students
+# 	File.open("students2.csv", "w") do |f2|
+# 		@students.each do |student|
+# 			student_data = [student[:name], student[:cohort], student[:age], student[:hobby], student[:country]]
+# 			f2.puts student_data.join(",")
+# 		end
+# 	end
 # end
