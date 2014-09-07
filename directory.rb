@@ -75,10 +75,10 @@ def input_cohort
 
 	# EXERCISE 8: corrects for typos by reprompting user for input
 	while !calendar.include?(@cohort) do
-		puts "Oops! Enter a valid calendar month, or press return for a default value of August."
+		puts "Oops! Enter a valid calendar month, or press return for the current month."
 		@cohort = STDIN.gets.chomp.downcase.to_sym
 		# EXERCISE 8: supplies a default value of August if the value is still empty
-		@cohort = :august if @cohort.empty?
+		@cohort = Time.new.strftime("%B").downcase.to_sym if @cohort.empty?
 	end
 end
 
